@@ -65,4 +65,34 @@ describe('stripJSONQuote', () => {
 }
     `);
   });
+
+  it('starts with "$"', () => {
+    const striped = stripJSONQuote(`
+{
+  "a": "aaa",
+  "$jsvalue": "haha"
+}
+    `);
+    expect(striped).toEqual(`
+{
+  "a": "aaa",
+  "jsvalue": haha
+}
+    `);
+  });
+
+  it('starts with "$" and has json', () => {
+    const striped = stripJSONQuote(`
+{
+  "a": "aaa",
+  "$jsvalue": "haha {^a^:^b^}"
+}
+    `);
+    expect(striped).toEqual(`
+{
+  "a": "aaa",
+  "jsvalue": haha {"a":"b"}
+}
+    `);
+  });
 });
